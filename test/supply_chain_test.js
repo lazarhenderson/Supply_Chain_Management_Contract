@@ -1,6 +1,6 @@
 const { expect } = require("chai");
 
-describe("Supply Chain Management Contract", function () {
+describe("Supply Chain Management Contract - Test all functions", function () {
   it("Deploy SupplyChainManagement Contract & Set Owner", async function () {
     [
       owner,
@@ -96,6 +96,24 @@ describe("Supply Chain Management Contract", function () {
         timestamp_future
       );
 
+    product1_unexpired = await this.supplyChainManagement.getProductDetails(1);
+    expect(product1_unexpired.name).to.equal("Product 1");
+    expect(product1_unexpired.quantity).to.equal(10);
+    expect(product1_unexpired.manufacturer).to.equal("Manufacturer 1");
+    expect(product1_unexpired.manufacturingDate).to.equal(timestamp_now);
+    expect(product1_unexpired.expirationDate).to.equal(timestamp_future);
+    expect(product1_unexpired.isExpired).to.equal(false);
+
+    product2_expired = await this.supplyChainManagement.getProductDetails(2);
+    expect(product2_expired.name).to.equal("Product 2");
+    expect(product2_expired.quantity).to.equal(100);
+    expect(product2_expired.manufacturer).to.equal("Manufacturer 2");
+    expect(product2_expired.manufacturingDate).to.equal(timestamp_now);
+    expect(product2_expired.expirationDate).to.equal(this.timestamp_expired);
+    expect(product2_expired.isExpired).to.equal(false);
+  });
+
+  it("getProductDetails() - Ensure Products have been Added", async function () {
     product1_unexpired = await this.supplyChainManagement.getProductDetails(1);
     expect(product1_unexpired.name).to.equal("Product 1");
     expect(product1_unexpired.quantity).to.equal(10);
