@@ -65,7 +65,7 @@ contract SupplyChainManagement {
     }
 
     // See address approval status
-    function getApprovedStatus(address _user) public view returns(bool) {
+    function getApprovedStatus(address _user) public view onlyApprovedEmployee returns(bool) {
         return approvedEmployees[_user].isApproved;
     }
 
@@ -129,34 +129,8 @@ contract SupplyChainManagement {
         emit ProductExpired(_productId, "The product has expired.");
     }
 
-    function getProduct(uint _productId) public view onlyApprovedEmployee returns (
-        uint productId,
-        string memory name,
-        uint quantity,
-        string memory manufacturer,
-        uint manufacturingDate,
-        uint expirationDate,
-        string memory currentLocation,
-        address currentOwner,
-        bool isSold,
-        bool isExpired
-    ) {
-        Product memory product = products[_productId];
-        return (
-            product.productId,
-            product.name,
-            product.quantity,
-            product.manufacturer,
-            product.manufacturingDate,
-            product.expirationDate,
-            product.currentLocation,
-            product.currentOwner,
-            product.isSold,
-            product.isExpired
-        );
-    }
 
-    function getProductNew(uint _productId) public view onlyApprovedEmployee returns (Product memory) {
+    function getProduct(uint _productId) public view onlyApprovedEmployee returns (Product memory) {
         return products[_productId];
     }
 }
