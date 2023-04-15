@@ -1,4 +1,4 @@
-# Supply Chain Management - WIP
+# Supply Chain Management - README WIP
 
 ## Problems with contract
 
