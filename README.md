@@ -61,7 +61,7 @@ function sellProduct(uint _productId, address _buyer, string memory _newLocation
 
 ## Test The SupplyChainManagement Contract
 
-First ensure you have Node.js install, you can see if you have it installed by using the following command line prompt:
+First ensure you have Node.js installed, you can see if you have it installed by using the following command line prompt to see your Node.js version:
 
 ```shell
 # Command Prompt (Windows)
