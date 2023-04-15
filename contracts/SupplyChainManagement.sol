@@ -124,7 +124,7 @@ contract SupplyChainManagement {
         emit ProductExpired(_productId, "The product has expired.");
     }
 
-    function getProduct(uint _productId) public view onlyApprovedEmployee returns (Product memory) {
+    function getProductDetails(uint _productId) public view onlyApprovedEmployee returns (Product memory) {
         return products[_productId];
     }
 }
