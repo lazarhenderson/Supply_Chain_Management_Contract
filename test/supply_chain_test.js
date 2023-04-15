@@ -1,5 +1,10 @@
 const { expect } = require("chai");
 
+function getDate(x) {
+  const myDate = new Date(x * 1000);
+  return myDate;
+}
+
 describe("Supply Chain Management Contract", function () {
   let SupplyChainManagement;
   let supplyChainManagement;
@@ -50,20 +55,45 @@ describe("Supply Chain Management Contract", function () {
   });
 
   describe("createProduct()", function () {
-    it("should create a new product", async function () {
+    it("Create 2 New Products", async function () {
+      // Get the current date
+      const currentDate = new Date();
+      // Add 3 months to the current date
+      const futureDate = new Date(
+        currentDate.getFullYear(),
+        currentDate.getMonth() + 3,
+        currentDate.getDate()
+      );
+      const expiredDate = new Date(
+        currentDate.getFullYear(),
+        currentDate.getMonth() - 3,
+        currentDate.getDate()
+      );
+      // Convert the future date to a Unix timestamp
+      const timestamp_future = Math.floor(futureDate.getTime() / 1000);
+      const timestamp_expired = Math.floor(expiredDate.getTime() / 1000);
+
       await supplyChainManagement.createProduct(
         "Product 1",
         10,
         "Manufacturer 1",
         1630435200,
-        1661971200
+        timestamp_future
       );
-      const product = await supplyChainManagement.getProduct(1);
-      expect(product.name).to.equal("Product 1");
-      expect(product.quantity).to.equal(10);
-      expect(product.manufacturer).to.equal("Manufacturer 1");
-      expect(product.manufacturingDate).to.equal(1630435200);
-      expect(product.expirationDate).to.equal(1661971200);
+      await supplyChainManagement.createProduct(
+        "Product 2",
+        100,
+        "Manufacturer 2",
+        1630435200,
+        timestamp_expired
+      );
+
+      const product1 = await supplyChainManagement.getProduct(1);
+      expect(product1.name).to.equal("Product 1");
+      expect(product1.quantity).to.equal(10);
+      expect(product1.manufacturer).to.equal("Manufacturer 1");
+      expect(product1.manufacturingDate).to.equal(1630435200);
+      expect(product1.expirationDate).to.equal(timestamp_future);
     });
 
     it("should revert if called by a non-approved employee", async function () {

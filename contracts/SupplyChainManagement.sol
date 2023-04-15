@@ -117,18 +117,12 @@ contract SupplyChainManagement {
         emit ProductEdited(_productId, _name, _quantity, _manufacturer, _manufacturingDate, _expirationDate, _isExpired, _location, _currentOwner, _isSold);
     }
 
-
-    ////////////////////////////////////////////////////////
-    /////////////////   Get Product Data   /////////////////
-    ////////////////////////////////////////////////////////
-
     function checkExpiration(uint _productId) public onlyApprovedEmployee {
         require(block.timestamp >= products[_productId].expirationDate, "The product has not expired yet.");
         require(!products[_productId].isExpired, "The product has already expired.");
         products[_productId].isExpired = true;
         emit ProductExpired(_productId, "The product has expired.");
     }
-
 
     function getProduct(uint _productId) public view onlyApprovedEmployee returns (Product memory) {
         return products[_productId];
