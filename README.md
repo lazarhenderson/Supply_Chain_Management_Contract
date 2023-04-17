@@ -8,17 +8,11 @@ I've created a Supply Chain Management smart contract that tracks the journey of
 
   <summary>Table of Contents</summary>
   <ol>
-    <li><a href="#what-functionality-can-be-added-to-contract">What Functionality Can Be Added To Contract</a></li>
     <li><a href="#adding-or-removing-employees-to-be-approved">Adding or Removing Employees To Be Approved</a></li>
     <li><a href="#managing-the-supply-chain-of-products">Managing the Supply Chain of Products</a></li>
     <li><a href="#test-the-supplychainmanagement-contract">Test The SupplyChainManagement Contract</a></li>
+    <li><a href="#additional-features-that-can-be-added">Additional Features That Can Be Added</a></li>
   </ol>
-
-## What Functionality Can Be Added To Contract
-
-1. Require products are not expired at creation
-2. Take product prices into account
-3. Store product's in a different way, such as a multi-level mapping or in a list
 
 ## Adding or Removing Employees To Be Approved
 
@@ -89,3 +83,21 @@ npm i -D @nomiclabs/hardhat-waffle
 # Run the test file using:
 npx hardhat test test/supply_chain_test.js
 ```
+
+## Additional Features That Can Be Added
+
+### Automated payments:
+
+- One possible addition to the contract could be an automated payment system that is triggered when certain milestones in the supply chain are reached. For example, when a product reaches a specific store, the contract could automatically release payment to the manufacturer or distributor.
+
+### Integration with IoT devices:
+
+- Another addition could be the integration of Internet of Things (IoT) devices into the supply chain management system. Sensors could be placed on products to track their location, temperature, and other variables. This data could then be recorded on the blockchain, providing an even more detailed and accurate record of the supply chain journey.
+
+### Integration with other systems:
+
+- The SupplyChainManagement contract could be integrated with a customer relationship management (CRM) system to track customer orders and deliveries, or with a logistics system to optimize the delivery process.
+
+### Environmental sustainability:
+
+- The contract could also be modified to include metrics related to environmental sustainability. The carbon footprint of each product can be tracked to provide this information to customers.
