@@ -3,6 +3,12 @@ pragma solidity ^0.8.0;
 
 contract SupplyChainManagement {
 
+    event ProductCreated(uint indexed productId, string name, uint quantity, string manufacturer, uint manufacturingDate, uint expirationDate);
+    event ProductEdited(uint indexed _productId, string _name, uint _quantity, string _manufacturer, uint _manufacturingDate, uint _expirationDate, bool _isExpired, string _location, address _currentOwner, bool _isSold);
+    event ProductTransferred(uint indexed productId, address indexed previousOwner, address indexed newOwner, string newLocation);
+    event ProductSold(uint indexed productId, address indexed seller, address indexed buyer, string newLocation);
+    event ProductExpired(uint indexed productId, string message);
+
     constructor (string memory _ownerName) {
         ApprovedEmployeesStruct storage newApprovedEmployeesStruct = approvedEmployees[msg.sender];
         newApprovedEmployeesStruct.name = _ownerName;
@@ -33,15 +39,9 @@ contract SupplyChainManagement {
     }
 
     mapping(address => ApprovedEmployeesStruct) approvedEmployees;
-    mapping (uint => Product) products;
+    mapping(uint => Product) products;
     uint public aggregateProductCount;
     uint public inventoryProductCount;
-
-    event ProductCreated(uint indexed productId, string name, uint quantity, string manufacturer, uint manufacturingDate, uint expirationDate);
-    event ProductEdited(uint indexed _productId, string _name, uint _quantity, string _manufacturer, uint _manufacturingDate, uint _expirationDate, bool _isExpired, string _location, address _currentOwner, bool _isSold);
-    event ProductTransferred(uint indexed productId, address indexed previousOwner, address indexed newOwner, string newLocation);
-    event ProductSold(uint indexed productId, address indexed seller, address indexed buyer, string newLocation);
-    event ProductExpired(uint indexed productId, string message);
 
     ////////////////////////////////////////////////////////
     /////////////////   Manage Employees   /////////////////
@@ -73,6 +73,7 @@ contract SupplyChainManagement {
     /////////////////   Manage Products   /////////////////
     ///////////////////////////////////////////////////////
 
+    // Add product into inventory
     function createProduct(string memory _name, uint _quantity, string memory _manufacturer, uint _manufacturingDate, uint _expirationDate) public onlyApprovedEmployee {
         aggregateProductCount++;
         inventoryProductCount++;
@@ -80,12 +81,14 @@ contract SupplyChainManagement {
         emit ProductCreated(aggregateProductCount, _name, _quantity, _manufacturer, _manufacturingDate, _expirationDate);
     }
 
+    // Transfer product's ownership & location
     function transferProduct(uint _productId, address _newOwner, string memory _newLocation) public onlyApprovedEmployee {
         products[_productId].currentOwner = _newOwner;
         products[_productId].currentLocation = _newLocation;
         emit ProductTransferred(_productId, msg.sender, _newOwner, _newLocation);
     }
 
+    // Sell product and update details accordingly
     function sellProduct(uint _productId, address _buyer, string memory _newLocation) public onlyApprovedEmployee {
         require(!products[_productId].isSold, "The product has already been sold.");
         inventoryProductCount--;
@@ -95,6 +98,7 @@ contract SupplyChainManagement {
         emit ProductSold(_productId, msg.sender, _buyer, _newLocation);
     }
 
+    // Edit product's details
     function editProductDetails(uint _productId, string memory _name, uint _quantity, string memory _manufacturer, uint _manufacturingDate, uint _expirationDate, string memory _location, address _currentOwner, bool _isSold) public onlyApprovedEmployee {
         products[_productId].name = _name;
         products[_productId].quantity = _quantity;
@@ -117,6 +121,7 @@ contract SupplyChainManagement {
         emit ProductEdited(_productId, _name, _quantity, _manufacturer, _manufacturingDate, _expirationDate, _isExpired, _location, _currentOwner, _isSold);
     }
 
+    // See if product is expired
     function checkExpiration(uint _productId) public onlyApprovedEmployee {
         require(block.timestamp >= products[_productId].expirationDate, "The product has not expired yet.");
         require(!products[_productId].isExpired, "The product has already expired.");
@@ -124,11 +129,8 @@ contract SupplyChainManagement {
         emit ProductExpired(_productId, "The product has expired.");
     }
 
+    // Retrieve product's details
     function getProductDetails(uint _productId) public view onlyApprovedEmployee returns (Product memory) {
         return products[_productId];
     }
 }
-
-
-
-
